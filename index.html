@@ -4,686 +4,790 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Giá Trị Thặng Dư – Kinh Tế Chính Trị Mác–Lênin</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Be+Vietnam+Pro:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;0,700;1,400&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --red:    #c0392b;
-    --gold:   #d4a843;
-    --dark:   #1a1a2e;
-    --darker: #0f0f1a;
-    --cream:  #f5f0e8;
-    --light:  #faf7f2;
-    --text:   #2c2c3a;
-    --muted:  #6b6b80;
-  }
+/* ═══════════════════════════════ RESET & VARS */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --ink:#0d0d14;
+  --paper:#f7f3ec;
+  --red:#bf2318;
+  --red2:#e8351f;
+  --gold:#c9943a;
+  --gold2:#f0c060;
+  --teal:#1b6b72;
+  --cream:#fdf9f3;
+  --muted:#7a7060;
+}
+html{scroll-behavior:smooth;cursor:none}
+body{font-family:'Syne',sans-serif;background:var(--ink);color:var(--paper);overflow-x:hidden;line-height:1.6}
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ═══════════════════════════════ CUSTOM CURSOR */
+#cursor{position:fixed;width:12px;height:12px;background:var(--gold2);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:transform .12s,background .2s;mix-blend-mode:difference}
+#cursor-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(240,192,96,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:all .18s ease}
+body:hover #cursor{transform:translate(-50%,-50%) scale(1)}
 
-  html { scroll-behavior: smooth; }
+/* ═══════════════════════════════ NOISE OVERLAY */
+body::before{
+  content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity:.032;pointer-events:none;z-index:9000;
+}
 
-  body {
-    font-family: 'Be Vietnam Pro', sans-serif;
-    background: var(--light);
-    color: var(--text);
-    line-height: 1.7;
-  }
+/* ═══════════════════════════════ NAV */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  padding:18px 40px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:linear-gradient(to bottom,rgba(13,13,20,.95),transparent);
+}
+.nav-logo{font-family:'Cormorant Garamond',serif;font-size:1.1rem;letter-spacing:.06em;color:var(--gold2);font-weight:300}
+.nav-links{display:flex;gap:24px}
+.nav-links a{color:rgba(247,243,236,.45);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;text-decoration:none;transition:color .25s}
+.nav-links a:hover{color:var(--gold2)}
 
-  /* ── HERO ─────────────────────────────────────────── */
-  .hero {
-    background: var(--darker);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 60px 24px;
-    position: relative;
-    overflow: hidden;
-  }
-  .hero::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 60% 50% at 20% 60%, rgba(192,57,43,.18) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 80% 30%, rgba(212,168,67,.12) 0%, transparent 70%);
-  }
-  .hero-eyebrow {
-    font-size: .75rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeUp .7s .2s forwards;
-  }
-  .hero h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.4rem, 6vw, 5rem);
-    font-weight: 900;
-    color: #fff;
-    line-height: 1.1;
-    max-width: 820px;
-    opacity: 0;
-    animation: fadeUp .8s .4s forwards;
-  }
-  .hero h1 span { color: var(--gold); }
-  .hero-sub {
-    margin-top: 24px;
-    font-size: 1rem;
-    color: rgba(255,255,255,.6);
-    max-width: 560px;
-    opacity: 0;
-    animation: fadeUp .8s .6s forwards;
-  }
-  .hero-badges {
-    margin-top: 36px;
-    display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
-    opacity: 0;
-    animation: fadeUp .8s .8s forwards;
-  }
-  .badge {
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.14);
-    color: rgba(255,255,255,.85);
-    padding: 6px 18px;
-    border-radius: 100px;
-    font-size: .82rem;
-    backdrop-filter: blur(6px);
-  }
-  .scroll-hint {
-    position: absolute; bottom: 32px; left: 50%; transform: translateX(-50%);
-    color: rgba(255,255,255,.3);
-    font-size: .75rem; letter-spacing: .15em;
-    animation: pulse 2s infinite;
-  }
+/* ═══════════════════════════════ HERO */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:120px 60px 80px;
+  position:relative;overflow:hidden;
+}
+.hero-bg{
+  position:absolute;inset:0;
+  background:radial-gradient(ellipse 80% 80% at 15% 50%,rgba(191,35,24,.22),transparent 65%),
+             radial-gradient(ellipse 60% 60% at 85% 20%,rgba(201,148,58,.13),transparent 60%),
+             radial-gradient(ellipse 50% 70% at 60% 90%,rgba(27,107,114,.1),transparent 60%);
+}
+/* Animated particles */
+.particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.particle{
+  position:absolute;
+  width:2px;height:2px;
+  background:var(--gold);
+  border-radius:50%;
+  animation:float linear infinite;
+  opacity:0;
+}
+@keyframes float{
+  0%{transform:translateY(110vh) translateX(0);opacity:0}
+  5%{opacity:.6}
+  95%{opacity:.4}
+  100%{transform:translateY(-10vh) translateX(var(--dx));opacity:0}
+}
 
-  /* ── LAYOUT ───────────────────────────────────────── */
-  .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+/* Spinning gear */
+.gear{
+  position:absolute;right:-80px;top:50%;transform:translateY(-50%);
+  width:420px;height:420px;opacity:.04;
+  animation:spin 40s linear infinite;
+}
+@keyframes spin{to{transform:translateY(-50%) rotate(360deg)}}
 
-  section { padding: 80px 0; }
-  section:nth-child(even) { background: var(--cream); }
+.hero-eyebrow{
+  font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;
+  opacity:0;animation:slideRight .7s .3s forwards;
+}
+.hero h1{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(3rem,8vw,7.5rem);
+  font-weight:700;line-height:1;
+  max-width:900px;
+  opacity:0;animation:slideRight .9s .5s forwards;
+}
+.hero h1 em{font-style:italic;color:var(--gold2)}
+.hero h1 .line2{display:block;font-size:clamp(1.8rem,4.5vw,4.2rem);font-weight:300;color:rgba(247,243,236,.6);margin-top:8px}
+.hero-desc{
+  margin-top:36px;max-width:520px;
+  font-size:.9rem;color:rgba(247,243,236,.5);font-weight:400;
+  line-height:1.8;
+  opacity:0;animation:slideRight .8s .75s forwards;
+}
+.hero-meta{
+  margin-top:48px;display:flex;gap:40px;flex-wrap:wrap;
+  opacity:0;animation:slideRight .8s 1s forwards;
+}
+.meta-item{border-left:2px solid var(--gold);padding-left:16px}
+.meta-item .val{font-family:'Cormorant Garamond',serif;font-size:2.4rem;font-weight:600;color:var(--gold2);line-height:1}
+.meta-item .lbl{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-top:4px}
 
-  .section-label {
-    font-size: .7rem;
-    letter-spacing: .25em;
-    text-transform: uppercase;
-    color: var(--red);
-    font-weight: 600;
-    margin-bottom: 10px;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.7rem, 3.5vw, 2.6rem);
-    font-weight: 700;
-    color: var(--dark);
-    line-height: 1.2;
-    margin-bottom: 24px;
-  }
-  .section-title span { color: var(--red); }
-  .divider {
-    width: 48px; height: 3px;
-    background: var(--gold);
-    border-radius: 2px;
-    margin-bottom: 32px;
-  }
+/* scroll indicator */
+.scroll-cue{
+  position:absolute;bottom:36px;left:60px;
+  display:flex;align-items:center;gap:12px;
+  color:rgba(247,243,236,.3);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;
+}
+.scroll-line{width:60px;height:1px;background:rgba(247,243,236,.2);position:relative;overflow:hidden}
+.scroll-line::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:var(--gold);animation:scanline 2s infinite}
+@keyframes scanline{to{left:200%}}
 
-  p { margin-bottom: 16px; color: #3a3a4a; font-size: .97rem; }
-  p:last-child { margin-bottom: 0; }
+/* ═══════════════════════════════ SECTIONS */
+section{padding:100px 60px;position:relative;overflow:hidden}
+.s-light{background:var(--cream);color:var(--ink)}
+.s-mid{background:#12121e;color:var(--paper)}
+.s-dark{background:var(--ink);color:var(--paper)}
 
-  /* ── CHAPTER INTRO CARDS ─────────────────────────── */
-  .chapter-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 40px;
-  }
-  @media(max-width:640px){ .chapter-grid { grid-template-columns: 1fr; } }
+.tag{font-size:.65rem;letter-spacing:.28em;text-transform:uppercase;font-weight:700;color:var(--gold);margin-bottom:14px;display:block}
+h2.big{font-family:'Cormorant Garamond',serif;font-size:clamp(2.4rem,5vw,4.2rem);font-weight:700;line-height:1.1;margin-bottom:32px}
+h2.big em{font-style:italic;color:var(--red2)}
+.s-light h2.big em{color:var(--red)}
+p.body-text{font-size:.92rem;color:rgba(247,243,236,.6);line-height:1.9;max-width:620px;margin-bottom:16px}
+.s-light p.body-text{color:rgba(13,13,20,.6)}
 
-  .chapter-card {
-    background: var(--darker);
-    border-radius: 14px;
-    padding: 30px;
-    color: #fff;
-    position: relative;
-    overflow: hidden;
-    transition: transform .3s;
-  }
-  .chapter-card:hover { transform: translateY(-4px); }
-  .chapter-card::before {
-    content: '';
-    position: absolute; top: -40px; right: -40px;
-    width: 120px; height: 120px;
-    border-radius: 50%;
-    background: var(--red);
-    opacity: .12;
-  }
-  .chapter-card .num {
-    font-family: 'Playfair Display', serif;
-    font-size: 3rem;
-    font-weight: 900;
-    color: var(--gold);
-    opacity: .4;
-    line-height: 1;
-    margin-bottom: 12px;
-  }
-  .chapter-card h3 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: #fff;
-    margin-bottom: 8px;
-  }
-  .chapter-card p {
-    font-size: .85rem;
-    color: rgba(255,255,255,.55);
-    margin: 0;
-  }
-  .chapter-card .pages {
-    margin-top: 16px;
-    display: inline-block;
-    font-size: .72rem;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--gold);
-    border: 1px solid rgba(212,168,67,.35);
-    padding: 4px 12px;
-    border-radius: 100px;
-  }
+/* ═══════════════════════════════ TICKER */
+.ticker-wrap{
+  background:var(--red);padding:14px 0;overflow:hidden;
+  border-top:1px solid rgba(255,255,255,.1);
+  border-bottom:1px solid rgba(255,255,255,.1);
+}
+.ticker{display:flex;gap:0;animation:ticker 22s linear infinite;white-space:nowrap}
+.ticker-item{
+  padding:0 48px;font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;
+  color:#fff;font-weight:700;
+  display:flex;align-items:center;gap:16px;
+}
+.ticker-item::after{content:'✦';opacity:.5;margin-left:16px}
+@keyframes ticker{to{transform:translateX(-50%)}}
 
-  /* ── TÍCH LŨY TƯ BẢN ─────────────────────────────── */
-  .tl-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 16px;
-    margin-top: 32px;
-  }
-  .tl-card {
-    background: #fff;
-    border: 1px solid #e5e0d8;
-    border-radius: 12px;
-    padding: 24px;
-    transition: box-shadow .3s;
-  }
-  .tl-card:hover { box-shadow: 0 8px 30px rgba(0,0,0,.08); }
-  .tl-icon {
-    width: 40px; height: 40px;
-    background: var(--red);
-    border-radius: 8px;
-    display: flex; align-items: center; justify-content: center;
-    margin-bottom: 14px;
-    font-size: 1.1rem;
-  }
-  .tl-card h4 {
-    font-size: .95rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 8px;
-  }
-  .tl-card p {
-    font-size: .84rem;
-    color: var(--muted);
-    margin: 0;
-    line-height: 1.6;
-  }
+/* ═══════════════════════════════ TÍCH LŨY - FACTOR CARDS */
+.factors-wrap{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:2px;
+  margin-top:48px;border:2px solid rgba(201,148,58,.2);
+  border-radius:16px;overflow:hidden;
+}
+@media(max-width:640px){.factors-wrap{grid-template-columns:1fr}}
+.factor{
+  padding:36px;
+  background:rgba(255,255,255,.02);
+  border:none;
+  position:relative;overflow:hidden;
+  cursor:pointer;
+  transition:background .35s;
+}
+.factor:hover{background:rgba(201,148,58,.06)}
+.factor::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,transparent 40%,rgba(201,148,58,.05));
+  opacity:0;transition:opacity .35s;
+}
+.factor:hover::before{opacity:1}
+.factor-num{
+  font-family:'Cormorant Garamond',serif;
+  font-size:5rem;font-weight:700;
+  color:var(--gold);opacity:.12;
+  position:absolute;top:10px;right:20px;
+  line-height:1;pointer-events:none;
+  transition:opacity .35s,transform .35s;
+}
+.factor:hover .factor-num{opacity:.22;transform:scale(1.08)}
+.factor-icon{font-size:1.8rem;margin-bottom:16px}
+.factor h4{font-size:1rem;font-weight:700;margin-bottom:10px;color:var(--gold2)}
+.s-light .factor h4{color:var(--red)}
+.factor p{font-size:.85rem;color:rgba(247,243,236,.5);line-height:1.7}
+.s-light .factor p{color:rgba(13,13,20,.55)}
 
-  /* ── TIMELINE ─────────────────────────────────────── */
-  .timeline { position: relative; padding-left: 32px; margin-top: 32px; }
-  .timeline::before {
-    content: '';
-    position: absolute; left: 8px; top: 6px; bottom: 6px;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--red), var(--gold));
-    border-radius: 2px;
-  }
-  .tl-item { position: relative; margin-bottom: 32px; }
-  .tl-item:last-child { margin-bottom: 0; }
-  .tl-dot {
-    position: absolute; left: -28px; top: 4px;
-    width: 14px; height: 14px;
-    border-radius: 50%;
-    background: var(--red);
-    border: 2px solid var(--light);
-    box-shadow: 0 0 0 2px var(--red);
-  }
-  .tl-item h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 6px;
-  }
-  .tl-item p { font-size: .88rem; color: #55556a; margin: 0; }
+/* ═══════════════════════════════ CONSEQUENCES TIMELINE */
+.c-timeline{margin-top:56px;position:relative;padding-left:48px}
+.c-timeline::before{
+  content:'';position:absolute;left:12px;top:0;bottom:0;
+  width:2px;background:linear-gradient(to bottom,var(--red),var(--gold),var(--teal));
+}
+.c-item{margin-bottom:48px;position:relative;opacity:0;transform:translateX(-20px);transition:opacity .6s,transform .6s}
+.c-item.visible{opacity:1;transform:none}
+.c-dot{
+  position:absolute;left:-40px;top:6px;
+  width:16px;height:16px;border-radius:50%;
+  background:var(--ink);border:2px solid var(--gold);
+  transition:background .3s;
+}
+.c-item:hover .c-dot{background:var(--gold)}
+.c-item h4{font-family:'Cormorant Garamond',serif;font-size:1.5rem;font-weight:600;color:var(--paper);margin-bottom:8px}
+.c-item p{font-size:.88rem;color:rgba(247,243,236,.5);line-height:1.8;max-width:580px}
 
-  /* ── FORMULA BOX ─────────────────────────────────── */
-  .formula-box {
-    background: var(--darker);
-    border-radius: 14px;
-    padding: 28px 32px;
-    margin: 28px 0;
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    flex-wrap: wrap;
-  }
-  .formula-label {
-    font-size: .72rem;
-    letter-spacing: .18em;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-  .formula {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    color: #fff;
-    font-weight: 700;
-  }
-  .formula-note {
-    font-size: .82rem;
-    color: rgba(255,255,255,.5);
-    margin-top: 6px;
-  }
+/* ═══════════════════════════════ FORMULA SECTION */
+.formula-section{padding:80px 60px;background:var(--red);position:relative;overflow:hidden}
+.formula-section::before{
+  content:'∑';
+  position:absolute;right:-30px;top:-60px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:400px;color:rgba(0,0,0,.08);line-height:1;pointer-events:none;
+}
+.formula-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-top:40px}
+@media(max-width:768px){.formula-cards{grid-template-columns:1fr}}
+.fcard{
+  background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.12);
+  border-radius:14px;padding:28px;
+  position:relative;overflow:hidden;
+  transition:transform .3s,box-shadow .3s;
+}
+.fcard:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(0,0,0,.3)}
+.fcard-label{font-size:.65rem;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:10px}
+.fcard-formula{
+  font-family:'Cormorant Garamond',serif;
+  font-size:1.8rem;font-weight:700;color:#fff;
+  line-height:1.2;margin-bottom:16px;
+}
+.fcard-desc{font-size:.82rem;color:rgba(255,255,255,.6);line-height:1.7}
+.fcard-glow{
+  position:absolute;bottom:-30px;right:-30px;
+  width:100px;height:100px;border-radius:50%;
+  background:rgba(255,255,255,.06);
+}
 
-  /* ── BIỂU HIỆN SECTION ───────────────────────────── */
-  .bh-tabs {
-    display: flex; gap: 8px; flex-wrap: wrap;
-    margin-bottom: 28px;
-  }
-  .tab-btn {
-    padding: 8px 22px;
-    border-radius: 100px;
-    border: 2px solid #ddd;
-    background: #fff;
-    font-family: 'Be Vietnam Pro', sans-serif;
-    font-size: .88rem;
-    font-weight: 500;
-    color: var(--muted);
-    cursor: pointer;
-    transition: all .25s;
-  }
-  .tab-btn.active, .tab-btn:hover {
-    background: var(--red);
-    border-color: var(--red);
-    color: #fff;
-  }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; animation: fadeIn .35s ease; }
+/* ═══════════════════════════════ TABS */
+.tabs-nav{display:flex;gap:0;margin-bottom:40px;border:1px solid rgba(201,148,58,.25);border-radius:12px;overflow:hidden;width:fit-content}
+.tab-btn{
+  padding:12px 28px;font-family:'Syne',sans-serif;font-size:.8rem;letter-spacing:.1em;
+  text-transform:uppercase;font-weight:700;
+  border:none;background:transparent;
+  color:rgba(247,243,236,.35);cursor:none;
+  transition:background .3s,color .3s;
+  position:relative;
+}
+.tab-btn.active{background:var(--gold);color:var(--ink)}
+.tab-btn:not(.active):hover{background:rgba(201,148,58,.1);color:var(--gold2)}
+.tab-pane{display:none}
+.tab-pane.active{display:grid;grid-template-columns:1fr 1fr;gap:32px;animation:fadeUp .4s ease}
+@media(max-width:720px){.tab-pane.active{grid-template-columns:1fr}}
 
-  .content-block {
-    background: #fff;
-    border-left: 4px solid var(--gold);
-    border-radius: 0 12px 12px 0;
-    padding: 24px 28px;
-    margin-bottom: 16px;
-  }
-  .content-block h4 {
-    font-size: 1rem;
-    font-weight: 600;
-    color: var(--dark);
-    margin-bottom: 10px;
-  }
-  .content-block p { font-size: .9rem; margin-bottom: 10px; }
-  .content-block p:last-child { margin-bottom: 0; }
+.content-card{
+  background:rgba(255,255,255,.03);border:1px solid rgba(247,243,236,.07);
+  border-radius:12px;padding:28px;
+  transition:border-color .3s,transform .3s;
+}
+.content-card:hover{border-color:rgba(201,148,58,.3);transform:translateY(-3px)}
+.content-card h4{
+  font-family:'Cormorant Garamond',serif;font-size:1.35rem;font-weight:600;
+  color:var(--gold2);margin-bottom:14px;
+}
+.content-card p{font-size:.87rem;color:rgba(247,243,236,.55);line-height:1.8;margin-bottom:12px}
+.content-card p:last-child{margin-bottom:0}
+.content-card .highlight{
+  background:rgba(201,148,58,.1);border-left:3px solid var(--gold);
+  padding:12px 16px;border-radius:0 8px 8px 0;
+  font-size:.88rem;color:var(--gold2);margin-top:14px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;
+}
 
-  /* ── QUOTE ────────────────────────────────────────── */
-  .quote-block {
-    border-left: 4px solid var(--red);
-    padding: 20px 28px;
-    background: rgba(192,57,43,.05);
-    border-radius: 0 10px 10px 0;
-    margin: 28px 0;
-  }
-  .quote-block p {
-    font-style: italic;
-    font-size: .95rem;
-    color: var(--dark);
-    margin-bottom: 8px;
-  }
-  .quote-block cite {
-    font-size: .8rem;
-    color: var(--muted);
-    font-style: normal;
-  }
+/* ═══════════════════════════════ BIG QUOTE */
+.bigquote{
+  padding:120px 60px;
+  background:linear-gradient(135deg,var(--ink) 0%,#0a1a1c 100%);
+  text-align:center;position:relative;overflow:hidden;
+}
+.bigquote::before{
+  content:'"';
+  position:absolute;top:-60px;left:50%;transform:translateX(-50%);
+  font-family:'Cormorant Garamond',serif;font-size:600px;
+  color:rgba(27,107,114,.07);line-height:1;pointer-events:none;
+}
+.bigquote blockquote{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(1.5rem,3.5vw,2.8rem);
+  font-weight:300;font-style:italic;
+  color:rgba(247,243,236,.8);
+  max-width:800px;margin:0 auto;
+  line-height:1.5;
+}
+.bigquote blockquote strong{color:var(--gold2);font-style:normal;font-weight:600}
+.bigquote cite{
+  display:block;margin-top:28px;
+  font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--muted);font-style:normal;font-family:'Syne',sans-serif;
+}
 
-  /* ── SUMMARY TABLE ────────────────────────────────── */
-  .sum-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 28px;
-    font-size: .88rem;
-  }
-  .sum-table th {
-    background: var(--dark);
-    color: #fff;
-    padding: 12px 16px;
-    text-align: left;
-    font-weight: 500;
-    letter-spacing: .04em;
-  }
-  .sum-table th:first-child { border-radius: 10px 0 0 0; }
-  .sum-table th:last-child  { border-radius: 0 10px 0 0; }
-  .sum-table td {
-    padding: 12px 16px;
-    border-bottom: 1px solid #ece8e0;
-    color: #3a3a4a;
-  }
-  .sum-table tr:hover td { background: rgba(212,168,67,.06); }
-  .sum-table tr:last-child td { border-bottom: none; }
+/* ═══════════════════════════════ TABLE */
+.compare-table{width:100%;border-collapse:separate;border-spacing:0 6px;margin-top:36px}
+.compare-table thead th{
+  font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--red);
+  padding:12px 20px;text-align:left;
+  border-bottom:2px solid rgba(191,35,24,.2);
+}
+.compare-table tbody tr{
+  background:rgba(13,13,20,.04);
+  transition:background .2s,transform .2s;
+  cursor:default;
+}
+.compare-table tbody tr:hover{background:rgba(191,35,24,.06);transform:translateX(4px)}
+.compare-table td{padding:18px 20px;font-size:.9rem;color:#2a2a36;font-weight:500;vertical-align:top}
+.compare-table td:first-child{
+  font-family:'Cormorant Garamond',serif;font-size:1.2rem;
+  color:var(--red);font-weight:700;
+  border-left:3px solid var(--red);
+  border-radius:4px 0 0 4px;
+}
+.compare-table td:last-child{font-family:'Cormorant Garamond',serif;font-style:italic;color:#555;font-weight:400}
 
-  /* ── FOOTER ───────────────────────────────────────── */
-  footer {
-    background: var(--darker);
-    color: rgba(255,255,255,.4);
-    text-align: center;
-    padding: 40px 24px;
-    font-size: .8rem;
-  }
-  footer span { color: var(--gold); }
+/* ═══════════════════════════════ PROGRESS BARS (nhân tố) */
+.bar-group{margin-top:40px;display:flex;flex-direction:column;gap:22px}
+.bar-item{}
+.bar-label{display:flex;justify-content:space-between;margin-bottom:8px}
+.bar-label span:first-child{font-size:.82rem;font-weight:700;color:var(--paper)}
+.bar-label span:last-child{font-size:.75rem;color:var(--gold)}
+.bar-track{height:6px;background:rgba(255,255,255,.08);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:linear-gradient(to right,var(--red),var(--gold));width:0;transition:width 1.2s cubic-bezier(.22,1,.36,1)}
 
-  /* ── ANIMATIONS ───────────────────────────────────── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(22px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes fadeIn {
-    from { opacity: 0; } to { opacity: 1; }
-  }
-  @keyframes pulse {
-    0%,100% { opacity: .3; } 50% { opacity: .7; }
-  }
+/* ═══════════════════════════════ FOOTER */
+footer{
+  background:#07070d;padding:60px;
+  border-top:1px solid rgba(201,148,58,.1);
+  display:grid;grid-template-columns:1fr 1fr;gap:40px;
+  align-items:end;
+}
+@media(max-width:640px){footer{grid-template-columns:1fr;padding:40px 24px}}
+.footer-brand{font-family:'Cormorant Garamond',serif;font-size:1.8rem;color:var(--gold2);margin-bottom:10px}
+.footer-sub{font-size:.78rem;color:var(--muted);line-height:1.7}
+.footer-qs{list-style:none}
+.footer-qs li{
+  padding:12px 0;border-bottom:1px solid rgba(255,255,255,.05);
+  font-size:.83rem;color:rgba(247,243,236,.4);
+  display:flex;align-items:flex-start;gap:10px;
+}
+.footer-qs li::before{content:counter(item);counter-increment:item;color:var(--gold);font-weight:700;font-size:.8rem;min-width:18px}
+.footer-qs{counter-reset:item}
 
-  /* ── NAV ──────────────────────────────────────────── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    background: rgba(15,15,26,.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(255,255,255,.07);
-    padding: 14px 24px;
-    display: flex; justify-content: center; gap: 28px;
-    flex-wrap: wrap;
-  }
-  nav a {
-    color: rgba(255,255,255,.6);
-    text-decoration: none;
-    font-size: .82rem;
-    letter-spacing: .06em;
-    transition: color .2s;
-  }
-  nav a:hover { color: var(--gold); }
+/* ═══════════════════════════════ ANIMATIONS */
+@keyframes slideRight{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s,transform .7s}
+.reveal.visible{opacity:1;transform:none}
+
+/* ═══════════════════════════════ RESPONSIVE */
+@media(max-width:768px){
+  .hero,.section,section{padding:80px 24px}
+  nav{padding:14px 20px}
+  .nav-links{display:none}
+  .formula-section{padding:60px 24px}
+  .bigquote{padding:80px 24px}
+  footer{padding:40px 24px}
+}
 </style>
 </head>
 <body>
 
+<!-- CURSOR -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
 <!-- NAV -->
 <nav>
-  <a href="#gioi-thieu">Giới thiệu</a>
-  <a href="#tich-luy">Tích lũy tư bản</a>
-  <a href="#bieu-hien">Biểu hiện GTTD</a>
-  <a href="#loi-nhuan">Lợi nhuận</a>
-  <a href="#loi-tuc">Lợi tức</a>
-  <a href="#dia-to">Địa tô</a>
-  <a href="#tong-ket">Tổng kết</a>
+  <span class="nav-logo">KTCT Mác–Lênin</span>
+  <div class="nav-links">
+    <a href="#tich-luy">Tích lũy</a>
+    <a href="#formulas">Công thức</a>
+    <a href="#bieu-hien">Biểu hiện</a>
+    <a href="#tong-ket">Tổng kết</a>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section class="hero" id="top">
-  <p class="hero-eyebrow">Giáo trình Kinh tế Chính trị Mác – Lênin · 2021</p>
-  <h1>Chương 3: <span>Giá Trị Thặng Dư</span><br>Trong Nền Kinh Tế Thị Trường</h1>
-  <p class="hero-sub">Tích lũy tư bản và các hình thức biểu hiện của giá trị thặng dư: Lợi nhuận · Lợi tức · Địa tô</p>
-  <div class="hero-badges">
-    <span class="badge">Trang 104 – 123</span>
-    <span class="badge">C. Mác · K. Lênin</span>
-    <span class="badge">Bậc đại học</span>
-  </div>
-  <p class="scroll-hint">↓ &nbsp; CUỘN XUỐNG</p>
-</section>
+<section class="hero">
+  <div class="hero-bg"></div>
+  <!-- SVG gear -->
+  <svg class="gear" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="100" cy="100" r="70" stroke="white" stroke-width="2"/>
+    <circle cx="100" cy="100" r="40" stroke="white" stroke-width="2"/>
+    <circle cx="100" cy="100" r="12" fill="white"/>
+    <g stroke="white" stroke-width="3">
+      <line x1="100" y1="20" x2="100" y2="40"/>
+      <line x1="100" y1="160" x2="100" y2="180"/>
+      <line x1="20" y1="100" x2="40" y2="100"/>
+      <line x1="160" y1="100" x2="180" y2="100"/>
+      <line x1="39" y1="39" x2="53" y2="53"/>
+      <line x1="147" y1="147" x2="161" y2="161"/>
+      <line x1="39" y1="161" x2="53" y2="147"/>
+      <line x1="147" y1="53" x2="161" y2="39"/>
+    </g>
+  </svg>
 
-<!-- GIỚI THIỆU -->
-<section id="gioi-thieu">
-  <div class="container">
-    <p class="section-label">Tổng quan chương</p>
-    <h2 class="section-title">Hai phần nội dung <span>cốt lõi</span></h2>
-    <div class="divider"></div>
-    <p>Chương 3 của giáo trình tập trung làm rõ hai nội dung lớn: <strong>tích lũy tư bản và các nhân tố ảnh hưởng</strong> đến quy mô tích lũy (tr. 104–109); và <strong>các hình thức biểu hiện của giá trị thặng dư</strong> trong nền kinh tế thị trường bao gồm lợi nhuận, lợi tức và địa tô tư bản chủ nghĩa (tr. 109–123).</p>
-    <div class="chapter-grid">
-      <div class="chapter-card">
-        <div class="num">I</div>
-        <h3>Tích lũy tư bản</h3>
-        <p>Bản chất của tích lũy, những nhân tố ảnh hưởng tới quy mô và một số hệ quả của tích lũy tư bản.</p>
-        <span class="pages">Trang 104 → 109</span>
-      </div>
-      <div class="chapter-card">
-        <div class="num">II</div>
-        <h3>Biểu hiện của GTTD</h3>
-        <p>Các hình thức cụ thể: lợi nhuận (bình quân, thương nghiệp), lợi tức và địa tô tư bản chủ nghĩa.</p>
-        <span class="pages">Trang 109 → 123</span>
-      </div>
+  <p class="hero-eyebrow">Chương 3 &nbsp;·&nbsp; Giáo trình KTCT Mác–Lênin 2021 &nbsp;·&nbsp; Trang 104–123</p>
+  <h1>
+    <em>Giá Trị</em> Thặng Dư
+    <span class="line2">Trong Nền Kinh Tế Thị Trường</span>
+  </h1>
+  <p class="hero-desc">Khám phá bản chất tích lũy tư bản và ba hình thức biểu hiện của giá trị thặng dư theo học thuyết của C. Mác.</p>
+
+  <div class="hero-meta">
+    <div class="meta-item">
+      <div class="val">20</div>
+      <div class="lbl">Trang nội dung</div>
+    </div>
+    <div class="meta-item">
+      <div class="val">04</div>
+      <div class="lbl">Nhân tố tích lũy</div>
+    </div>
+    <div class="meta-item">
+      <div class="val">03</div>
+      <div class="lbl">Hình thức GTTD</div>
     </div>
   </div>
-</section>
 
-<!-- TÍCH LŨY TƯ BẢN -->
-<section id="tich-luy">
-  <div class="container">
-    <p class="section-label">Phần I · Trang 104–109</p>
-    <h2 class="section-title">Tích lũy <span>tư bản</span></h2>
-    <div class="divider"></div>
-
-    <p>Tư bản duy trì sự tồn tại và phát triển thông qua quá trình <strong>tích lũy tư bản</strong> – tức là biến một phần giá trị thặng dư trở lại thành tư bản để mở rộng quy mô sản xuất.</p>
-
-    <h3 style="font-size:1.1rem;font-weight:600;color:var(--dark);margin:28px 0 16px">1. Bản chất của tích lũy tư bản</h3>
-    <p>Tích lũy tư bản phản ánh quan hệ bóc lột: nguồn gốc của tư bản tích lũy là giá trị thặng dư do lao động của công nhân tạo ra. Tích lũy dẫn tới <strong>gia tăng cấu tạo hữu cơ của tư bản</strong>, thúc đẩy tích tụ và tập trung tư bản, phân hóa thu nhập ngày càng sâu sắc.</p>
-
-    <h3 style="font-size:1.1rem;font-weight:600;color:var(--dark);margin:28px 0 16px">2. Những nhân tố ảnh hưởng đến quy mô tích lũy</h3>
-    <div class="tl-grid">
-      <div class="tl-card">
-        <div class="tl-icon">📈</div>
-        <h4>Tỷ suất giá trị thặng dư</h4>
-        <p>Tỷ suất m' càng cao thì lượng giá trị thặng dư thu được càng lớn, cơ sở tích lũy càng rộng.</p>
-      </div>
-      <div class="tl-card">
-        <div class="tl-icon">⚡</div>
-        <h4>Năng suất lao động</h4>
-        <p>Năng suất lao động tăng làm giảm giá trị tư liệu sản xuất, cho phép mua thêm nhiều yếu tố sản xuất hơn với cùng lượng giá trị.</p>
-      </div>
-      <div class="tl-card">
-        <div class="tl-icon">⚙️</div>
-        <h4>Chênh lệch tư bản sử dụng & tiêu dùng</h4>
-        <p>Phần tư bản cố định vẫn hoạt động nhưng chưa hao mòn hết tạo ra "khoảng trống" giúp mở rộng sản xuất không cần thêm chi phí.</p>
-      </div>
-      <div class="tl-card">
-        <div class="tl-icon">💰</div>
-        <h4>Quy mô tư bản ứng trước</h4>
-        <p>Tư bản ban đầu càng lớn thì lượng giá trị thặng dư tạo ra càng nhiều, tạo điều kiện tích lũy theo quy mô lớn hơn.</p>
-      </div>
-    </div>
-
-    <h3 style="font-size:1.1rem;font-weight:600;color:var(--dark);margin:28px 0 16px">3. Một số hệ quả của tích lũy tư bản</h3>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <h4>Gia tăng cấu tạo hữu cơ của tư bản</h4>
-        <p>Tỷ lệ giữa tư bản bất biến và tư bản khả biến ngày càng tăng, máy móc thay thế lao động sống.</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <h4>Thúc đẩy tích tụ và tập trung tư bản</h4>
-        <p>Tích lũy khiến các doanh nghiệp lớn ngày càng lớn hơn thông qua tích tụ (nội bộ) và tập trung (sáp nhập, liên kết).</p>
-      </div>
-      <div class="tl-item">
-        <div class="tl-dot"></div>
-        <h4>Phân hóa thu nhập</h4>
-        <p>Tư bản tập trung vào tay thiểu số trong khi đông đảo công nhân chỉ có sức lao động để bán, dẫn tới bất bình đẳng thu nhập ngày càng sâu sắc.</p>
-      </div>
-    </div>
+  <div class="scroll-cue">
+    <div class="scroll-line"></div>
+    Cuộn xuống
   </div>
 </section>
 
-<!-- BIỂU HIỆN GTTD -->
-<section id="bieu-hien">
-  <div class="container">
-    <p class="section-label">Phần II · Trang 109–123</p>
-    <h2 class="section-title">Các hình thức biểu hiện của <span>Giá trị thặng dư</span></h2>
-    <div class="divider"></div>
-    <p>Trong nền kinh tế thị trường, giá trị thặng dư không tồn tại dưới hình thái thuần túy mà biểu hiện qua các hình thức cụ thể tùy theo lĩnh vực sử dụng tư bản. Ba hình thức chính là <strong>lợi nhuận</strong>, <strong>lợi tức</strong> và <strong>địa tô tư bản chủ nghĩa</strong>.</p>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker" id="ticker">
+    <span class="ticker-item">Giá trị thặng dư</span>
+    <span class="ticker-item">Tích lũy tư bản</span>
+    <span class="ticker-item">Lợi nhuận bình quân</span>
+    <span class="ticker-item">Lợi tức tư bản</span>
+    <span class="ticker-item">Địa tô TBCN</span>
+    <span class="ticker-item">Cấu tạo hữu cơ</span>
+    <span class="ticker-item">Giá cả sản xuất</span>
+    <span class="ticker-item">Tỷ suất lợi nhuận</span>
+    <span class="ticker-item">Tư bản bất biến</span>
+    <span class="ticker-item">Tư bản khả biến</span>
+    <!-- duplicate for seamless -->
+    <span class="ticker-item">Giá trị thặng dư</span>
+    <span class="ticker-item">Tích lũy tư bản</span>
+    <span class="ticker-item">Lợi nhuận bình quân</span>
+    <span class="ticker-item">Lợi tức tư bản</span>
+    <span class="ticker-item">Địa tô TBCN</span>
+    <span class="ticker-item">Cấu tạo hữu cơ</span>
+    <span class="ticker-item">Giá cả sản xuất</span>
+    <span class="ticker-item">Tỷ suất lợi nhuận</span>
+    <span class="ticker-item">Tư bản bất biến</span>
+    <span class="ticker-item">Tư bản khả biến</span>
+  </div>
+</div>
 
-    <div class="bh-tabs">
-      <button class="tab-btn active" onclick="showTab('loi-nhuan-tab', this)">💼 Lợi nhuận</button>
-      <button class="tab-btn" onclick="showTab('loi-tuc-tab', this)">🏦 Lợi tức</button>
-      <button class="tab-btn" onclick="showTab('dia-to-tab', this)">🌾 Địa tô</button>
+<!-- PHẦN I: TÍCH LŨY TƯ BẢN -->
+<section class="s-mid" id="tich-luy">
+  <span class="tag">Phần I &nbsp;·&nbsp; Trang 104–109</span>
+  <h2 class="big reveal">Tích Lũy <em>Tư Bản</em></h2>
+  <p class="body-text reveal">Tích lũy tư bản là quá trình biến một phần giá trị thặng dư trở lại thành tư bản, mở rộng quy mô sản xuất. Đây là cơ chế sống còn để tư bản tồn tại và phát triển trong nền kinh tế thị trường.</p>
+
+  <!-- NHÂN TỐ ẢNH HƯỞNG -->
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--gold2);margin:56px 0 8px" class="reveal">Nhân tố ảnh hưởng đến quy mô tích lũy</h3>
+  <p class="body-text reveal" style="margin-bottom:0">Bốn yếu tố chính quyết định lượng giá trị thặng dư được chuyển hóa thành tư bản:</p>
+
+  <div class="factors-wrap reveal" style="--d:.1s">
+    <div class="factor">
+      <div class="factor-num">01</div>
+      <div class="factor-icon">📈</div>
+      <h4>Tỷ suất giá trị thặng dư (m')</h4>
+      <p>m' càng cao, lượng giá trị thặng dư tạo ra càng lớn, cơ sở để tích lũy càng được mở rộng và quy mô tích lũy ngày càng tăng.</p>
     </div>
-
-    <div id="loi-nhuan-tab" class="tab-panel active">
-      <div class="content-block">
-        <h4>Bản chất lợi nhuận</h4>
-        <p>Lợi nhuận (ký hiệu <strong>p</strong>) là phần chênh lệch giữa giá trị hàng hóa và chi phí sản xuất: <code style="background:#f0ece4;padding:2px 8px;border-radius:4px;font-size:.9em">p = G − k</code></p>
-        <p>Về bề ngoài, lợi nhuận như là phần bù đắp vượt trội so với toàn bộ chi phí sản xuất, che giấu đi bản chất bóc lột là nguồn gốc thực sự từ giá trị thặng dư của người lao động.</p>
-      </div>
-      <div class="formula-box">
-        <div>
-          <div class="formula-label">Tỷ suất lợi nhuận</div>
-          <div class="formula">p' = m / (c + v) × 100%</div>
-          <div class="formula-note">m: giá trị thặng dư &nbsp;·&nbsp; c: tư bản bất biến &nbsp;·&nbsp; v: tư bản khả biến</div>
-        </div>
-      </div>
-      <div class="content-block" id="loi-nhuan">
-        <h4>Lợi nhuận bình quân</h4>
-        <p>Do cạnh tranh tự do giữa các ngành, tư bản chuyển dịch từ ngành có tỷ suất lợi nhuận thấp sang ngành có tỷ suất cao. Quá trình này diễn ra đến khi hình thành <strong>tỷ suất lợi nhuận bình quân (p̄')</strong> — con số trung bình của tất cả các ngành trong nền kinh tế.</p>
-        <p>Khi lợi nhuận chuyển hóa thành lợi nhuận bình quân, giá trị hàng hóa chuyển hóa thành <strong>giá cả sản xuất</strong>:</p>
-        <div style="background:#f5f0e8;padding:12px 18px;border-radius:8px;font-weight:600;margin:12px 0;font-size:.95rem">GCSX = k + p̄</div>
-        <p>Điều kiện hình thành: tư bản và sức lao động tự do di chuyển giữa các ngành.</p>
-      </div>
-      <div class="content-block">
-        <h4>Lợi nhuận thương nghiệp</h4>
-        <p>Trong phân công lao động xã hội xuất hiện <strong>tư bản thương nghiệp</strong> — bộ phận chuyên môn hóa lưu thông hàng hóa. Lợi nhuận thương nghiệp là số chênh lệch giữa giá bán và giá mua, nguồn gốc suy cho cùng vẫn là một phần giá trị thặng dư được phân chia cho tư bản thương nghiệp.</p>
-      </div>
+    <div class="factor">
+      <div class="factor-num">02</div>
+      <div class="factor-icon">⚡</div>
+      <h4>Năng suất lao động xã hội</h4>
+      <p>Năng suất tăng làm giảm giá trị tư liệu sản xuất, cho phép tư bản mua được nhiều yếu tố sản xuất hơn với cùng số tiền chi ra.</p>
     </div>
-
-    <div id="loi-tuc-tab" class="tab-panel">
-      <div class="content-block" id="loi-tuc">
-        <h4>Lợi tức là gì?</h4>
-        <p>Trong nền kinh tế thị trường, có chủ thể sở hữu tiền nhàn rỗi và có chủ thể cần vốn để sản xuất kinh doanh. Quan hệ cho vay – đi vay hình thành.</p>
-        <p><strong>Lợi tức (z)</strong> là một phần của lợi nhuận bình quân mà người đi vay phải trả cho người cho vay vì đã sử dụng tiền nhàn rỗi của họ. Quan hệ này phản ánh quan hệ lợi ích giữa hai bên trong phân chia giá trị thặng dư.</p>
-      </div>
-      <div class="formula-box">
-        <div>
-          <div class="formula-label">Tỷ suất lợi tức</div>
-          <div class="formula">z' = z / TBCV × 100%</div>
-          <div class="formula-note">z: lợi tức &nbsp;·&nbsp; TBCV: tư bản cho vay</div>
-        </div>
-      </div>
-      <div class="content-block">
-        <h4>Đặc điểm của tư bản cho vay</h4>
-        <p><strong>Thứ nhất</strong>, tư bản cho vay là hàng hóa đặc biệt — giá trị sử dụng của nó là khả năng sinh ra lợi nhuận bình quân, do vậy giá cả (lợi tức) không được quyết định bởi giá trị mà thường thấp hơn nhiều.</p>
-        <p><strong>Thứ hai</strong>, tư bản cho vay vận động theo công thức T → T' tạo ra ảo giác "tiền đẻ ra tiền", che giấu nguồn gốc lợi tức từ lao động của công nhân.</p>
-        <p><strong>Thứ ba</strong>, tỷ suất lợi tức phụ thuộc vào tỷ suất lợi nhuận bình quân và quan hệ cung – cầu về tư bản cho vay.</p>
-      </div>
-      <div class="quote-block">
-        <p>"Tư bản cho vay là hình thái tư bản phiến diện nhất, song cũng được sùng bái nhất."</p>
-        <cite>— C. Mác, Tư bản luận</cite>
-      </div>
+    <div class="factor">
+      <div class="factor-num">03</div>
+      <div class="factor-icon">⚙️</div>
+      <h4>Chênh lệch tư bản sử dụng & tiêu dùng</h4>
+      <p>Tư bản cố định vẫn hoạt động nhưng chưa hao mòn hết tạo ra dư địa mở rộng sản xuất mà không cần chi phí bổ sung ngay lập tức.</p>
     </div>
+    <div class="factor">
+      <div class="factor-num">04</div>
+      <div class="factor-icon">💰</div>
+      <h4>Quy mô tư bản ứng trước</h4>
+      <p>Tư bản ban đầu càng lớn, lượng giá trị thặng dư tạo ra càng nhiều, tạo điều kiện tích lũy theo quy mô lớn hơn.</p>
+    </div>
+  </div>
 
-    <div id="dia-to-tab" class="tab-panel">
-      <div class="content-block" id="dia-to">
-        <h4>Địa tô tư bản chủ nghĩa</h4>
-        <p>Tư bản kinh doanh nông nghiệp, ngoài lợi nhuận bình quân, còn thu thêm được một phần giá trị thặng dư dôi ra — đây chính là <strong>địa tô tư bản chủ nghĩa</strong> — phần mà nhà tư bản nông nghiệp phải nộp cho địa chủ vì đã thuê đất.</p>
-      </div>
-      <div class="content-block">
-        <h4>Địa tô chênh lệch</h4>
-        <p>Là phần lợi nhuận siêu ngạch dôi ra ngoài lợi nhuận bình quân, được tính bằng chênh lệch giữa giá trị nông sản và giá cả sản xuất chung của nông sản. Địa tô chênh lệch phát sinh do đất có độ màu mỡ, vị trí thuận lợi khác nhau hoặc do thâm canh.</p>
-      </div>
-      <div class="formula-box">
-        <div>
-          <div class="formula-label">Giá cả ruộng đất</div>
-          <div class="formula">Giá đất = Địa tô / Tỷ suất lợi tức ngân hàng</div>
-          <div class="formula-note">Giá đất phụ thuộc vào địa tô và tỷ lệ lãi suất tiền gửi ngân hàng</div>
-        </div>
-      </div>
-      <div class="content-block">
-        <h4>Ý nghĩa lý luận</h4>
-        <p>Lý luận địa tô tư bản chủ nghĩa của C. Mác không những chỉ rõ bản chất quan hệ sản xuất tư bản chủ nghĩa trong nông nghiệp mà còn là cơ sở khoa học để xây dựng các chính sách về thuế, điều tiết các loại địa tô và giải quyết các quan hệ đất đai.</p>
-      </div>
+  <!-- PROGRESS BARS -->
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--gold2);margin:60px 0 8px" class="reveal">Mức độ tác động tương đối</h3>
+  <div class="bar-group reveal" id="bars">
+    <div class="bar-item">
+      <div class="bar-label"><span>Tỷ suất giá trị thặng dư</span><span>Tác động trực tiếp</span></div>
+      <div class="bar-track"><div class="bar-fill" data-w="92%"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label"><span>Năng suất lao động</span><span>Tác động gián tiếp</span></div>
+      <div class="bar-track"><div class="bar-fill" data-w="78%"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label"><span>Chênh lệch tư bản sử dụng–tiêu dùng</span><span>Tác động tiềm tàng</span></div>
+      <div class="bar-track"><div class="bar-fill" data-w="62%"></div></div>
+    </div>
+    <div class="bar-item">
+      <div class="bar-label"><span>Quy mô tư bản ứng trước</span><span>Tác động nền tảng</span></div>
+      <div class="bar-track"><div class="bar-fill" data-w="85%"></div></div>
+    </div>
+  </div>
+
+  <!-- HỆ QUẢ -->
+  <h3 style="font-family:'Cormorant Garamond',serif;font-size:1.6rem;font-weight:600;color:var(--gold2);margin:60px 0 8px" class="reveal">Một số hệ quả của tích lũy tư bản</h3>
+  <div class="c-timeline" id="ctimeline">
+    <div class="c-item">
+      <div class="c-dot"></div>
+      <h4>Gia tăng cấu tạo hữu cơ của tư bản</h4>
+      <p>Tỷ lệ c/v ngày càng tăng — máy móc, công nghệ thay thế lao động sống. Điều này dẫn đến "đội quân thất nghiệp dự trữ" ngày càng đông hơn trong chủ nghĩa tư bản.</p>
+    </div>
+    <div class="c-item">
+      <div class="c-dot"></div>
+      <h4>Thúc đẩy tích tụ và tập trung tư bản</h4>
+      <p>Các doanh nghiệp lớn ngày càng to hơn thông qua tích tụ nội bộ và tập trung qua sáp nhập, liên kết. Đây là tiền đề cho sự xuất hiện của độc quyền.</p>
+    </div>
+    <div class="c-item">
+      <div class="c-dot"></div>
+      <h4>Phân hóa thu nhập ngày càng sâu sắc</h4>
+      <p>Tư bản tập trung vào thiểu số nhà tư bản trong khi đại đa số công nhân chỉ có sức lao động để bán, tạo ra bất bình đẳng kinh tế – xã hội mang tính hệ thống.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CÔNG THỨC SECTION -->
+<section class="formula-section" id="formulas">
+  <span class="tag" style="color:rgba(255,255,255,.5)">Công thức cốt lõi</span>
+  <h2 class="big reveal" style="color:#fff"><em style="color:var(--gold2)">Toán học</em> của tư bản</h2>
+  <div class="formula-cards">
+    <div class="fcard reveal">
+      <div class="fcard-label">Tỷ suất lợi nhuận</div>
+      <div class="fcard-formula">p' = m/(c+v) × 100%</div>
+      <div class="fcard-desc">m: giá trị thặng dư &nbsp;·&nbsp; c: tư bản bất biến &nbsp;·&nbsp; v: tư bản khả biến</div>
+      <div class="fcard-glow"></div>
+    </div>
+    <div class="fcard reveal" style="transition-delay:.1s">
+      <div class="fcard-label">Giá cả sản xuất</div>
+      <div class="fcard-formula">GCSX = k + p̄</div>
+      <div class="fcard-desc">k: chi phí sản xuất &nbsp;·&nbsp; p̄: lợi nhuận bình quân. Hình thành khi lợi nhuận chuyển hóa thành lợi nhuận bình quân.</div>
+      <div class="fcard-glow"></div>
+    </div>
+    <div class="fcard reveal" style="transition-delay:.2s">
+      <div class="fcard-label">Tỷ suất lợi tức</div>
+      <div class="fcard-formula">z' = z/TBCV × 100%</div>
+      <div class="fcard-desc">z: lợi tức &nbsp;·&nbsp; TBCV: tư bản cho vay. Giới hạn bởi tỷ suất lợi nhuận bình quân và quan hệ cung–cầu vốn.</div>
+      <div class="fcard-glow"></div>
+    </div>
+  </div>
+  <div class="fcard reveal" style="margin-top:20px;max-width:440px;transition-delay:.3s">
+    <div class="fcard-label">Giá cả ruộng đất</div>
+    <div class="fcard-formula">Giá đất = Địa tô / Tỷ suất lợi tức</div>
+    <div class="fcard-desc">Cơ sở khoa học để xây dựng chính sách thuế, điều tiết địa tô và giải quyết quan hệ đất đai.</div>
+    <div class="fcard-glow"></div>
+  </div>
+</section>
+
+<!-- BIG QUOTE -->
+<div class="bigquote">
+  <blockquote class="reveal">
+    "Tư bản cho vay vận động theo công thức <strong>T → T'</strong>, tạo ra ảo tưởng là <strong>tiền đẻ ra tiền</strong> — không phản ánh rõ nguồn gốc của lợi tức từ lao động của công nhân."
+  </blockquote>
+  <cite class="reveal">C. Mác — Tư Bản Luận</cite>
+</div>
+
+<!-- PHẦN II: BIỂU HIỆN -->
+<section class="s-dark" id="bieu-hien">
+  <span class="tag">Phần II &nbsp;·&nbsp; Trang 109–123</span>
+  <h2 class="big reveal">Các Hình Thức <em>Biểu Hiện</em><br>của Giá Trị Thặng Dư</h2>
+  <p class="body-text reveal">Trong thực tế, giá trị thặng dư không xuất hiện dưới hình thái thuần túy mà biểu hiện qua ba hình thức tùy theo lĩnh vực tư bản hoạt động.</p>
+
+  <div class="tabs-nav reveal">
+    <button class="tab-btn active" onclick="openTab('loi-nhuan',this)">💼 Lợi nhuận</button>
+    <button class="tab-btn" onclick="openTab('loi-tuc',this)">🏦 Lợi tức</button>
+    <button class="tab-btn" onclick="openTab('dia-to',this)">🌾 Địa tô</button>
+  </div>
+
+  <div id="loi-nhuan" class="tab-pane active">
+    <div class="content-card">
+      <h4>Bản chất lợi nhuận</h4>
+      <p>Lợi nhuận <strong style="color:var(--gold2)">(p)</strong> là phần chênh lệch giữa giá trị hàng hóa và chi phí sản xuất tư bản chủ nghĩa: <strong>p = G − k</strong>. Về bề ngoài, lợi nhuận như là kết quả của toàn bộ tư bản ứng trước, che giấu bản chất bóc lột thực sự.</p>
+      <p>Lợi nhuận là mục tiêu, động cơ và động lực của mọi hoạt động sản xuất kinh doanh trong nền kinh tế thị trường tư bản chủ nghĩa.</p>
+      <div class="highlight">"Lợi nhuận là phần thưởng cho việc gánh chịu rủi ro và cho sự đổi mới." — P. Samuelson</div>
+    </div>
+    <div class="content-card">
+      <h4>Lợi nhuận bình quân & Giá cả sản xuất</h4>
+      <p>Do cạnh tranh tự do giữa các ngành, tư bản di chuyển từ ngành lợi nhuận thấp sang ngành lợi nhuận cao. Quá trình này dừng lại khi hình thành <strong style="color:var(--gold2)">tỷ suất lợi nhuận bình quân (p̄')</strong> — con số trung bình chung toàn nền kinh tế.</p>
+      <p>Khi đó, giá trị hàng hóa chuyển hóa thành <strong style="color:var(--gold2)">giá cả sản xuất</strong>: <strong>GCSX = k + p̄</strong>. Đây là căn cứ để các doanh nghiệp lựa chọn ngành nghề, phương án kinh doanh hiệu quả nhất.</p>
+    </div>
+  </div>
+
+  <div id="loi-tuc" class="tab-pane">
+    <div class="content-card">
+      <h4>Lợi tức — Tiền đẻ ra tiền?</h4>
+      <p>Trong nền kinh tế luôn tồn tại hai nhóm: chủ thể có tiền nhàn rỗi và chủ thể cần vốn để sản xuất. Quan hệ cho vay – đi vay hình thành. <strong style="color:var(--gold2)">Lợi tức (z)</strong> là một phần lợi nhuận bình quân mà người đi vay nhường cho người cho vay.</p>
+      <div class="highlight">Công thức: z' = z / TBCV × 100%</div>
+    </div>
+    <div class="content-card">
+      <h4>Đặc điểm tư bản cho vay</h4>
+      <p><strong style="color:var(--gold2)">Thứ nhất</strong>, giá cả (lợi tức) được quyết định bởi giá trị sử dụng — khả năng sinh lợi nhuận — không phải giá trị thực.</p>
+      <p><strong style="color:var(--gold2)">Thứ hai</strong>, vận động T → T' tạo ảo giác "tiền tự sinh tiền", che giấu nguồn gốc từ lao động công nhân.</p>
+      <p><strong style="color:var(--gold2)">Thứ ba</strong>, là hình thái tư bản phiến diện nhất song lại được "sùng bái" nhất trong xã hội tư bản.</p>
+    </div>
+  </div>
+
+  <div id="dia-to" class="tab-pane">
+    <div class="content-card">
+      <h4>Địa tô tư bản chủ nghĩa</h4>
+      <p>Tư bản nông nghiệp ngoài lợi nhuận bình quân còn thu thêm phần giá trị thặng dư dôi ra — đây là <strong style="color:var(--gold2)">địa tô TBCN</strong> — khoản nhà tư bản nông nghiệp phải nộp cho địa chủ vì thuê đất.</p>
+      <p><strong>Địa tô chênh lệch</strong> phát sinh do đất đai có độ màu mỡ, vị trí địa lý hay điều kiện thâm canh khác nhau, tạo ra lợi nhuận siêu ngạch vượt trên mức bình quân.</p>
+    </div>
+    <div class="content-card">
+      <h4>Giá cả ruộng đất & Ý nghĩa lý luận</h4>
+      <p>Giá đất được xác định bằng tỷ lệ giữa địa tô và tỷ suất lợi tức ngân hàng — phản ánh giá trị vốn hóa của nguồn thu nhập từ đất.</p>
+      <p>Lý luận địa tô của Mác là cơ sở khoa học để xây dựng chính sách về <strong style="color:var(--gold2)">thuế</strong>, điều tiết địa tô, và giải quyết các quan hệ đất đai trong phát triển kinh tế.</p>
+      <div class="highlight">Giá đất = Địa tô ÷ Tỷ suất lợi tức nhận gửi ngân hàng</div>
     </div>
   </div>
 </section>
 
 <!-- TỔNG KẾT -->
-<section id="tong-ket">
-  <div class="container">
-    <p class="section-label">Tổng kết</p>
-    <h2 class="section-title">Bảng so sánh ba <span>hình thức GTTD</span></h2>
-    <div class="divider"></div>
-    <table class="sum-table">
-      <thead>
-        <tr>
-          <th>Hình thức</th>
-          <th>Lĩnh vực</th>
-          <th>Nguồn gốc</th>
-          <th>Công thức cốt lõi</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td><strong>Lợi nhuận (p)</strong></td>
-          <td>Sản xuất & thương nghiệp</td>
-          <td>Giá trị thặng dư (m) của công nhân</td>
-          <td>p = G − k; p' = m/(c+v)×100%</td>
-        </tr>
-        <tr>
-          <td><strong>Lợi tức (z)</strong></td>
-          <td>Tín dụng, ngân hàng</td>
-          <td>Phần lợi nhuận bình quân nhường cho người cho vay</td>
-          <td>z' = z / TBCV × 100%</td>
-        </tr>
-        <tr>
-          <td><strong>Địa tô (R)</strong></td>
-          <td>Nông nghiệp, đất đai</td>
-          <td>Phần GTTD vượt trên lợi nhuận bình quân</td>
-          <td>Giá đất = R / z'</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <div style="margin-top:40px;background:var(--darker);border-radius:14px;padding:32px;color:#fff;">
-      <p style="font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:12px">Câu hỏi ôn tập chương</p>
-      <ol style="padding-left:20px;color:rgba(255,255,255,.75);font-size:.9rem;line-height:2">
-        <li>Phân tích nguồn gốc và bản chất của giá trị thặng dư. Các phương pháp sản xuất giá trị thặng dư?</li>
-        <li>Tích lũy tư bản và các nhân tố ảnh hưởng đến quy mô tích lũy? Liên hệ thực tiễn?</li>
-        <li>Phân tích các hình thức biểu hiện của giá trị thặng dư trong nền kinh tế thị trường. Ý nghĩa thực tiễn?</li>
-      </ol>
-    </div>
-  </div>
+<section class="s-light" id="tong-ket">
+  <span class="tag" style="color:var(--red)">Tổng kết</span>
+  <h2 class="big reveal" style="color:var(--ink)">So Sánh Ba <em style="color:var(--red)">Hình Thức</em> GTTD</h2>
+  <table class="compare-table reveal" style="--ink-table:1">
+    <thead>
+      <tr>
+        <th>Hình thức</th>
+        <th>Lĩnh vực</th>
+        <th>Nguồn gốc</th>
+        <th>Công thức</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Lợi nhuận (p)</td>
+        <td>Sản xuất & thương nghiệp</td>
+        <td>Giá trị thặng dư m của công nhân</td>
+        <td><em>p = G − k</em></td>
+      </tr>
+      <tr>
+        <td>Lợi tức (z)</td>
+        <td>Tín dụng, ngân hàng</td>
+        <td>Phần lợi nhuận BQ nhường cho người cho vay</td>
+        <td><em>z' = z / TBCV × 100%</em></td>
+      </tr>
+      <tr>
+        <td>Địa tô (R)</td>
+        <td>Nông nghiệp, đất đai</td>
+        <td>GTTD vượt trên lợi nhuận bình quân</td>
+        <td><em>Giá đất = R / z'</em></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="body-text reveal" style="margin-top:32px;color:rgba(13,13,20,.78)">Giá trị thặng dư biểu hiện cụ thể qua các hình thái: lợi nhuận, lợi tức, địa tô — mỗi hình thức gắn với một lĩnh vực tư bản và quan hệ phân phối khác nhau, nhưng cùng chung một nguồn gốc là lao động không được trả công của công nhân.</p>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <p>Dựa trên <span>Giáo trình Kinh tế Chính trị Mác–Lênin</span> · Bộ GD&ĐT · NXB CTQG Sự thật · Hà Nội 2021</p>
-  <p style="margin-top:6px">Chương 3 · Trang 104–123 · Dành cho sinh viên bậc đại học</p>
+  <div>
+    <div class="footer-brand">KTCT Mác–Lênin</div>
+    <div class="footer-sub">
+      Chương 3: Giá trị thặng dư trong nền kinh tế thị trường<br>
+      Giáo trình Kinh tế Chính trị Mác–Lênin · Bộ GD&ĐT<br>
+      NXB Chính trị Quốc gia Sự Thật · Hà Nội 2021<br>
+      Trang 104 – 123 · Dành cho sinh viên bậc đại học
+    </div>
+  </div>
+  <div>
+    <p style="font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);margin-bottom:14px">Câu hỏi ôn tập</p>
+    <ol class="footer-qs">
+      <li>Phân tích nguồn gốc, bản chất của GTTD. Các phương pháp sản xuất GTTD?</li>
+      <li>Tích lũy tư bản và các nhân tố ảnh hưởng đến quy mô tích lũy? Liên hệ thực tiễn?</li>
+      <li>Phân tích các hình thức biểu hiện của GTTD trong nền kinh tế thị trường. Ý nghĩa thực tiễn?</li>
+    </ol>
+  </div>
 </footer>
 
 <script>
-function showTab(id, btn) {
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+/* ── CURSOR ── */
+const cur = document.getElementById('cursor');
+const ring = document.getElementById('cursor-ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
+(function animRing(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(animRing)})();
+document.querySelectorAll('a,button,.factor,.fcard,.content-card,.tab-btn').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{cur.style.transform='translate(-50%,-50%) scale(2.2)';ring.style.transform='translate(-50%,-50%) scale(1.5)'});
+  el.addEventListener('mouseleave',()=>{cur.style.transform='translate(-50%,-50%) scale(1)';ring.style.transform='translate(-50%,-50%) scale(1)'});
+});
+
+/* ── PARTICLES ── */
+const pc = document.getElementById('particles');
+for(let i=0;i<28;i++){
+  const p=document.createElement('div');
+  p.className='particle';
+  const left=Math.random()*100;
+  const dur=12+Math.random()*18;
+  const delay=Math.random()*20;
+  const dx=(Math.random()-0.5)*200+'px';
+  p.style.cssText=`left:${left}%;--dx:${dx};animation-duration:${dur}s;animation-delay:${delay}s`;
+  pc.appendChild(p);
+}
+
+/* ── TABS ── */
+function openTab(id,btn){
+  document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById(id).classList.add('active');
   btn.classList.add('active');
 }
 
-// Simple scroll animation
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.style.opacity = '1';
-      e.target.style.transform = 'translateY(0)';
+/* ── INTERSECTION OBSERVER ── */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      // animate bar fills
+      e.target.querySelectorAll&&e.target.querySelectorAll('.bar-fill').forEach(b=>{
+        b.style.width=b.dataset.w;
+      });
     }
   });
-}, { threshold: 0.1 });
+},{threshold:0.12});
+document.querySelectorAll('.reveal,.c-item').forEach(el=>io.observe(el));
 
-document.querySelectorAll('.tl-card, .chapter-card, .content-block, .formula-box, .quote-block').forEach(el => {
-  el.style.opacity = '0';
-  el.style.transform = 'translateY(18px)';
-  el.style.transition = 'opacity .5s ease, transform .5s ease';
-  observer.observe(el);
+/* Bars parent trigger */
+const barsSection = document.getElementById('bars');
+if(barsSection){
+  const barsIO = new IntersectionObserver(entries=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.querySelectorAll('.bar-fill').forEach((b,i)=>{
+          setTimeout(()=>{b.style.width=b.dataset.w},i*150);
+        });
+        barsIO.disconnect();
+      }
+    });
+  },{threshold:0.3});
+  barsIO.observe(barsSection);
+}
+
+/* ── HERO NUMBER COUNTER ── */
+function animCount(el,end,dur){
+  let start=0,step=end/60,t=0;
+  const tick=()=>{t++;start=Math.min(start+step,end);el.textContent=String(Math.round(start)).padStart(2,'0');if(t<60)requestAnimationFrame(tick)};
+  requestAnimationFrame(tick);
+}
+setTimeout(()=>{
+  document.querySelectorAll('.meta-item .val').forEach(el=>{
+    animCount(el,parseInt(el.textContent),600);
+  });
+},900);
+
+/* ── PARALLAX HERO GEAR ── */
+window.addEventListener('scroll',()=>{
+  const y=window.scrollY;
+  const gear=document.querySelector('.gear');
+  if(gear) gear.style.transform=`translateY(calc(-50% + ${y*0.15}px)) rotate(${y*0.04}deg)`;
+  const heroBg=document.querySelector('.hero-bg');
+  if(heroBg) heroBg.style.transform=`translateY(${y*0.3}px)`;
 });
+
+/* ── SMOOTH TABLE ROW STAGGER ── */
+document.querySelectorAll('.compare-table tbody tr').forEach((tr,i)=>{
+  tr.style.opacity='0';tr.style.transform='translateX(-16px)';tr.style.transition=`opacity .5s ${i*.12}s,transform .5s ${i*.12}s`;
+});
+const tableIO=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('tbody tr').forEach(tr=>{tr.style.opacity='1';tr.style.transform='none'});
+      tableIO.disconnect();
+    }
+  });
+},{threshold:0.2});
+const tbl=document.querySelector('.compare-table');
+if(tbl) tableIO.observe(tbl);
 </script>
 </body>
 </html>
