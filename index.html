@@ -233,6 +233,46 @@ p.body-text{font-size:.92rem;color:rgba(247,243,236,.6);line-height:1.9;max-widt
   width:100px;height:100px;border-radius:50%;
   background:rgba(255,255,255,.06);
 }
+/* ── BÀI TẬP VÍ DỤ ── */
+.fcard-exercise{
+  margin-top:20px;
+  border-top:1px solid rgba(255,255,255,.1);
+  padding-top:16px;
+}
+.fcard-exercise-label{
+  font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--gold2);margin-bottom:10px;font-weight:700;
+  display:flex;align-items:center;gap:6px;
+}
+.fcard-exercise-label::before{content:'✏';font-size:.85rem}
+.fcard-q{font-size:.83rem;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:14px}
+.fcard-q strong{color:#fff}
+.show-ans-btn{
+  background:rgba(240,192,96,.15);
+  border:1px solid rgba(240,192,96,.3);
+  color:var(--gold2);
+  font-family:'Syne',sans-serif;
+  font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
+  padding:7px 16px;border-radius:100px;cursor:none;
+  transition:background .2s,border-color .2s;
+}
+.show-ans-btn:hover{background:rgba(240,192,96,.28);border-color:var(--gold2)}
+.fcard-answer{
+  display:none;
+  margin-top:14px;
+  background:rgba(240,192,96,.1);
+  border-left:3px solid var(--gold2);
+  border-radius:0 8px 8px 0;
+  padding:12px 16px;
+  font-size:.84rem;color:rgba(255,255,255,.8);line-height:1.8;
+  animation:fadeUp .3s ease;
+}
+.fcard-answer.open{display:block}
+.fcard-answer .ans-step{color:var(--gold2);font-weight:700}
+.fcard-answer .ans-result{
+  margin-top:8px;font-family:'Cormorant Garamond',serif;
+  font-size:1.1rem;color:#fff;font-weight:600;
+}
 
 /* ═══════════════════════════════ TABS */
 .tabs-nav{display:flex;gap:0;margin-bottom:40px;border:1px solid rgba(201,148,58,.25);border-radius:12px;overflow:hidden;width:fit-content}
@@ -546,18 +586,56 @@ footer{
       <div class="fcard-label">Tỷ suất lợi nhuận</div>
       <div class="fcard-formula">p' = m/(c+v) × 100%</div>
       <div class="fcard-desc">m: giá trị thặng dư &nbsp;·&nbsp; c: tư bản bất biến &nbsp;·&nbsp; v: tư bản khả biến</div>
+      <div class="fcard-exercise">
+        <div class="fcard-exercise-label">Bài tập ví dụ</div>
+        <div class="fcard-q">Một nhà tư bản bỏ ra <strong>80 triệu đồng</strong> mua máy móc, nguyên vật liệu (c) và <strong>20 triệu đồng</strong> thuê lao động (v). Công nhân tạo ra giá trị thặng dư <strong>m = 20 triệu đồng</strong>. Tính tỷ suất lợi nhuận p'?</div>
+        <button class="show-ans-btn" onclick="toggleAns(this)">Xem lời giải</button>
+        <div class="fcard-answer">
+          <span class="ans-step">Áp dụng công thức:</span><br>
+          p' = m / (c + v) × 100%<br>
+          p' = 20 / (80 + 20) × 100%<br>
+          p' = 20 / 100 × 100%
+          <div class="ans-result">→ p' = 20%</div>
+          Tức là cứ 100 đồng tư bản ứng trước, nhà tư bản thu về 20 đồng lợi nhuận.
+        </div>
+      </div>
       <div class="fcard-glow"></div>
     </div>
     <div class="fcard reveal" style="transition-delay:.1s">
       <div class="fcard-label">Giá cả sản xuất</div>
       <div class="fcard-formula">GCSX = k + p̄</div>
       <div class="fcard-desc">k: chi phí sản xuất &nbsp;·&nbsp; p̄: lợi nhuận bình quân. Hình thành khi lợi nhuận chuyển hóa thành lợi nhuận bình quân.</div>
+      <div class="fcard-exercise">
+        <div class="fcard-exercise-label">Bài tập ví dụ</div>
+        <div class="fcard-q">Chi phí sản xuất của một xí nghiệp là <strong>k = 70 triệu đồng</strong>. Tỷ suất lợi nhuận bình quân toàn ngành là <strong>p̄' = 20%</strong>. Tính giá cả sản xuất?</div>
+        <button class="show-ans-btn" onclick="toggleAns(this)">Xem lời giải</button>
+        <div class="fcard-answer">
+          <span class="ans-step">Bước 1 — Tính lợi nhuận bình quân:</span><br>
+          p̄ = k × p̄' = 70 × 20% = 14 triệu đồng<br><br>
+          <span class="ans-step">Bước 2 — Tính giá cả sản xuất:</span><br>
+          GCSX = k + p̄ = 70 + 14
+          <div class="ans-result">→ GCSX = 84 triệu đồng</div>
+          Đây là mức giá mà xí nghiệp dựa vào để định giá bán sản phẩm.
+        </div>
+      </div>
       <div class="fcard-glow"></div>
     </div>
     <div class="fcard reveal" style="transition-delay:.2s">
       <div class="fcard-label">Tỷ suất lợi tức</div>
       <div class="fcard-formula">z' = z/TBCV × 100%</div>
       <div class="fcard-desc">z: lợi tức &nbsp;·&nbsp; TBCV: tư bản cho vay. Giới hạn bởi tỷ suất lợi nhuận bình quân và quan hệ cung–cầu vốn.</div>
+      <div class="fcard-exercise">
+        <div class="fcard-exercise-label">Bài tập ví dụ</div>
+        <div class="fcard-q">Một người cho vay <strong>200 triệu đồng</strong>. Sau một năm thu về <strong>16 triệu đồng</strong> tiền lãi. Tính tỷ suất lợi tức z'?</div>
+        <button class="show-ans-btn" onclick="toggleAns(this)">Xem lời giải</button>
+        <div class="fcard-answer">
+          <span class="ans-step">Áp dụng công thức:</span><br>
+          z' = z / TBCV × 100%<br>
+          z' = 16 / 200 × 100%
+          <div class="ans-result">→ z' = 8%/năm</div>
+          Tỷ suất này phải nhỏ hơn tỷ suất lợi nhuận bình quân — phần còn lại là lợi nhuận người đi vay giữ lại.
+        </div>
+      </div>
       <div class="fcard-glow"></div>
     </div>
   </div>
@@ -565,6 +643,19 @@ footer{
     <div class="fcard-label">Giá cả ruộng đất</div>
     <div class="fcard-formula">Giá đất = Địa tô / Tỷ suất lợi tức</div>
     <div class="fcard-desc">Cơ sở khoa học để xây dựng chính sách thuế, điều tiết địa tô và giải quyết quan hệ đất đai.</div>
+    <div class="fcard-exercise">
+      <div class="fcard-exercise-label">Bài tập ví dụ</div>
+      <div class="fcard-q">Một mảnh ruộng cho địa tô hàng năm là <strong>10 triệu đồng</strong>. Tỷ suất lợi tức ngân hàng là <strong>5%/năm</strong>. Tính giá cả của mảnh ruộng đó?</div>
+      <button class="show-ans-btn" onclick="toggleAns(this)">Xem lời giải</button>
+      <div class="fcard-answer">
+        <span class="ans-step">Áp dụng công thức:</span><br>
+        Giá đất = Địa tô / z'<br>
+        Giá đất = 10 / 5%<br>
+        Giá đất = 10 / 0,05
+        <div class="ans-result">→ Giá đất = 200 triệu đồng</div>
+        Ý nghĩa: mua mảnh đất này tương đương gửi 200 triệu vào ngân hàng với lãi suất 5%, cũng thu được 10 triệu/năm.
+      </div>
+    </div>
     <div class="fcard-glow"></div>
   </div>
 </section>
@@ -713,6 +804,14 @@ for(let i=0;i<28;i++){
   const dx=(Math.random()-0.5)*200+'px';
   p.style.cssText=`left:${left}%;--dx:${dx};animation-duration:${dur}s;animation-delay:${delay}s`;
   pc.appendChild(p);
+}
+
+/* ── TOGGLE ANSWER ── */
+function toggleAns(btn){
+  const ans = btn.nextElementSibling;
+  const isOpen = ans.classList.contains('open');
+  ans.classList.toggle('open');
+  btn.textContent = isOpen ? 'Xem lời giải' : 'Ẩn lời giải';
 }
 
 /* ── TABS ── */
