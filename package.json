@@ -1,0 +1,16 @@
+{
+  "name": "present-mln122",
+  "version": "1.0.0",
+  "description": "Dự án presentation cho MLN122",
+  "main": "index.js",
+  "scripts": {
+    "start": "echo 'Project started'",
+    "dev": "echo 'Development mode'"
+  },
+  "keywords": [
+    "presentation",
+    "mln122"
+  ],
+  "author": "Nemdev144",
+  "license": "MIT"
+}
